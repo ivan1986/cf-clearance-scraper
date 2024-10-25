@@ -1,0 +1,13 @@
+apiVersion: v1
+appVersion: v1
+description: A Helm chart for cloudflare clearance
+name: cf-clearance-scraper
+version: 0.1.0
+keywords:
+    - cloudflare
+    - clearance
+home: https://github.com/zfcsoftware/cf-clearance-scraper
+sources:
+    - https://github.com/zfcsoftware/cf-clearance-scraper
+maintainers:
+    - name: zfcsoftware

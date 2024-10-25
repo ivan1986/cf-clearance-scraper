@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+{{ include "k8s-hlp.labels" . | indent 4 }}
+spec:
+  selector:
+    matchLabels:
+      srv: {{ include "k8s-hlp.fullname" . }}
+  template:
+    metadata:
+      labels:
+        srv: {{ include "k8s-hlp.fullname" . }}
+        app.kubernetes.io/name: {{ .Release.Name }}-{{ .Chart.Name }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      terminationGracePeriodSeconds: 120
+      containers:
+      - name: {{ .Release.Name }}-{{ .Chart.Name }}-node
+        image: "{{ .Values.images.container.repository }}:{{ .Values.images.container.tag }}"
+        env:
+          - name: browserLimit
+            value: "{{ .Values.browserLimit }}"
+        resources:
+{{- toYaml .Values.resources | nindent 10 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
